@@ -500,6 +500,152 @@ namespace UI
                     $"- { item.Voorstelling.Titel}- { item.Voorstelling.Uitvoerders}-{ item.Voorstelling.Prijs}- { item.AantalPlaatsen}");
             }
         }
+        public static void Inloggen()
+        {
+            if (!(Klant is null))
+            {
+                Console.WriteLine("Klant is reeds ingelogd. Log eerst uit aub");
+                return;
+            }
+            Klant klant = null;
+            var gebruikersnaam = "-";
+
+            while (gebruikersnaam!=string.Empty)
+            {
+                Console.WriteLine();
+                Console.WriteLine("===============");
+                Console.WriteLine("I N L O G G E N");
+                Console.WriteLine("===============");
+                Console.Write("Gebruikersnaam <Enter>=Terug: ");
+                gebruikersnaam = Console.ReadLine();
+
+                while ((gebruikersnaam!=string.Empty)&(klant is null))
+                {
+                    Console.Write(" Wachtwoord: ");
+                    var wachtwoord = Console.ReadLine();
+                    klant = Service.GetKlant(gebruikersnaam, wachtwoord);
+                    if (klant is null)
+                    {
+                        Console.WriteLine("Klant werd niet gevonden. Probeer opnieuw.");
+                        Console.Write("Gebruikersnaam <Enter>=Terug: ");
+                        gebruikersnaam = Console.ReadLine();
+                    }
+                    else
+                    {
+                        Console.WriteLine("Inloggen met succes voltooid.");
+                        Klant = klant;
+                        gebruikersnaam = string.Empty;
+                    }
+
+                }
+            }
+            return;
+
+        }
+        public static void Uitloggen()
+        {
+            if (Klant is null)
+            {
+                Console.WriteLine("Klant is niet ingelogd");
+            }
+            Klant = null;
+        }
+
+        public static Klant Registreren()
+        {
+            Klant klant = null;
+            var voornaam = "-";
+
+            while (voornaam!=string.Empty)
+            {
+                Console.WriteLine();
+                Console.WriteLine("=====================");
+                Console.WriteLine("R E G I S T R E R E N");
+                Console.WriteLine("=====================");
+                Console.WriteLine();
+                Console.Write(" Voornaam <Enter>=Terug: ");
+                voornaam = Console.ReadLine();
+
+                while (voornaam !=string.Empty)
+                {
+                    Console.Write(" Familienaam: ");
+                    var familienaam = Console.ReadLine();
+                    Console.Write(" Straat: ");
+                    var straat = Console.ReadLine();
+                    Console.Write(" Huisnr: ");
+                    var huisnr = Console.ReadLine();
+                    Console.Write(" Postcode: ");
+                    var postcode = Console.ReadLine();
+                    Console.Write(" Gemeente: ");
+                    var gemeente = Console.ReadLine();
+                    Console.Write(" Gebruikersnaam: ");
+                    var gebruikersnaam = Console.ReadLine();
+                    Console.Write(" Wachtwoord: ");
+                    var wachtwoord = Console.ReadLine();
+                    Console.Write("Wachtwoord bevestigen: ");
+                    var wachtwoordbevestiging = Console.ReadLine();
+                    Console.WriteLine();
+
+                    //Validatie
+                    bool ok = true;
+
+                    if (string.IsNullOrEmpty(familienaam))
+                    {
+                        Console.WriteLine("familienaam is verplicht.");
+                        ok = false;
+                    }
+                    if (string.IsNullOrEmpty(gebruikersnaam))
+                    {
+                        Console.WriteLine("Gebruikersnaam is verplicht.");
+                        ok = false;
+                    }
+                    if (string.IsNullOrEmpty(wachtwoord))
+                    {
+                        Console.WriteLine("wachtwoord is verplicht.");
+                        ok = false;
+                    }
+                    if (string.IsNullOrEmpty(wachtwoordbevestiging))
+                    {
+                        Console.WriteLine("wachtwoordbevestiging is verplicht.");
+                        ok = false;
+                    }
+                    if (wachtwoord != wachtwoordbevestiging)
+                    {
+                        Console.WriteLine("Wachtwoord en Wachtwoordbevestiging moeten gelijk zijn.");
+                        ok = false;
+                    }
+                    Console.WriteLine();
+
+                    if (ok)
+                    {
+                        //Toevoegen klant
+                        klant = new Klant()
+                        {
+                            VoorNaam = voornaam,
+                            FamilieNaam = familienaam,
+                            Straat = straat,
+                            HuisNr = huisnr,
+                            PostCode = postcode,
+                            Gemeente = gemeente,
+                            GebruikersNaam = gebruikersnaam,
+                            Paswoord = wachtwoord
+                        };
+                        Service.VoegKlantToe(klant);
+                        Console.WriteLine("De klant werd toegevoegd.");
+                        Klant = klant;
+                        voornaam = string.Empty;
+                    }
+                    else
+                    {
+                        // Opnieuw
+                        Console.Write(" Voornaam <Enter>=Terug: ");
+                        voornaam = Console.ReadLine();
+                    }
+                }
+
+            }
+            return klant;
+        }
 
     }
 }
