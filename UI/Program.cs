@@ -97,7 +97,7 @@ namespace UI
                         Uitloggen();
                         break;
                     case "R":
-                        Registeren();
+                        Registreren();
                         break;
 
                 }
